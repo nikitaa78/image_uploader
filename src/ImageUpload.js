@@ -8,14 +8,15 @@ import Banner from './Banner';
 export function ImageUpload() {
   const [images, setImages] = React.useState([]);
   const [open, setOpen] = React.useState(false);
-  const [severity, setSeverity] = React.useState(null);
+  const [severity, setSeverity] = React.useState(0);
 
-  const maxNumber = 69;
+  const maxNumber = 10;
 
   const onChange = (imageList, addUpdateIndex) => {
     // data for submit
     if (imageList.length == 0) {
       setImages(imageList);
+      setOpen(false);
     }
     let url = imageList[addUpdateIndex];
     console.log(url);
@@ -33,8 +34,8 @@ export function ImageUpload() {
       }).then((res) =>
         res.json().then((data) => {
           // Setting a data from api
-        console.log("HERE: ", data);
-        if (data.status === 'ok') {
+        if (data.status == 200) {
+          imageList[addUpdateIndex[0]].data_url = data.file_url
           setImages(imageList);
         }
         setSeverity(data.status);
@@ -77,15 +78,15 @@ export function ImageUpload() {
                 >
                   <Paper elevation={3}>
                       {isDragging ? "Drop here please" : "Upload space"}
+                      <br></br>
                       {imageList.map((image, index) => (
                           <img key={index} src={image.data_url} />
                       ))}
                   </Paper>
                 </Box>
                 <button
-                    style={isDragging ? { color: 'red' } : undefined}
+                    // style={isDragging ? { color: 'red' } : undefined}
                     onClick={onImageUpload}
-                    {...dragProps}
                 >
                     Upload Image
                 </button>

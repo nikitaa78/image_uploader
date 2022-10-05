@@ -8,11 +8,21 @@ import CloseIcon from '@mui/icons-material/Close';
 
 export default function Banner(props) {
 
+  const getSeverity = severity => {
+    if (severity == 200) {
+        return 'success'
+    } else if (severity == 400) {
+        return 'error'
+    } else {
+        return ''
+    }
+  };
+
   return (
     <Box sx={{ width: '100%' }}>
       <Collapse in={props.open}>
         <Alert
-          severity={props.severity === 'ok' ? 'success' : 'error'}
+          severity={getSeverity(props.severity)}
           action={
             <IconButton
               aria-label="close"
@@ -27,7 +37,7 @@ export default function Banner(props) {
           }
           sx={{ mb: 2 }}
         >
-          {props.severity === 'ok' ? 'Image uploaded!' : 'Error uploading image :('}
+          {props.severity == 200 ? 'Image uploaded!' : 'Error uploading image :('}
         </Alert>
       </Collapse>
       {/* <Button

@@ -1,4 +1,5 @@
 # Import flask and datetime module for showing date and time
+from urllib.request import urlretrieve
 from flask import Flask, jsonify, request
 import datetime
 from PIL import Image
@@ -6,9 +7,7 @@ import base64
 from io import BytesIO
 from jinja2 import Undefined
 import requests
-import sys
-
-# print(sys.executable)
+import io
   
 x = datetime.datetime.now()
   
@@ -48,12 +47,17 @@ def send_image():
     
     # ----- SECTION 2 -----
     try:
+        file_url = None
         # Base64 DATA
         if "data:image/jpeg;base64," in url:
             base_string = url.replace("data:image/jpeg;base64,", "")
             decoded_img = base64.b64decode(base_string)
             img = Image.open(BytesIO(decoded_img))
-
+            rotated_img = img.rotate(90)
+            rotated_img_bytes = image_to_byte_array(rotated_img, 'jpeg')
+            encoded_img = base64.encodebytes(rotated_img_bytes)
+            str_encoding = str(encoded_img, 'utf-8')
+            file_url = "data:image/jpeg;base64," + str_encoding
             file_name = file_name_for_base64_data + ".jpg"
             img.save(file_name, "jpeg")
 
@@ -62,7 +66,11 @@ def send_image():
             base_string = url.replace("data:image/png;base64,", "")
             decoded_img = base64.b64decode(base_string)
             img = Image.open(BytesIO(decoded_img))
-            print("MADE IT TO IMG: ", img)
+            rotated_img = img.rotate(90)
+            rotated_img_bytes = image_to_byte_array(rotated_img, 'png')
+            encoded_img = base64.encodebytes(rotated_img_bytes)
+            str_encoding = str(encoded_img, 'utf-8')
+            file_url = "data:image/png;base64," + str_encoding
             file_name = file_name_for_base64_data + ".png"
             img.save(file_name, "png")
 
@@ -70,14 +78,28 @@ def send_image():
         else:
             response = requests.get(url)
             img = Image.open(BytesIO(response.content)).convert("RGB")
+            rotated_img = img.rotate(90)
+            rotated_img_bytes = image_to_byte_array(rotated_img, 'jpeg')
+            encoded_img = base64.encodebytes(rotated_img_bytes)
+            str_encoding = str(encoded_img, 'utf-8')
+            file_url = "data:image/jpeg;base64," + str_encoding
             file_name = file_name_for_regular_data + ".jpg"
             img.save(file_name, "jpeg")
         
     # ----- SECTION 3 -----    
-        return {'status': 'ok', 'file_name': file_name}
+        return jsonify({'status': 200, 'file_name': file_name, 'file_url': file_url}), 200
     except Exception as e:
         status = "Error! = " + str(e)
         print(status)
 
 
-    return {'status': 'error', 'file_name': None}
+    return jsonify({'status': 400}), 400
+
+def image_to_byte_array(image: Image, format) -> bytes:
+  # BytesIO is a fake file stored in memory
+  imgByteArr = io.BytesIO()
+  # image.save expects a file as a argument, passing a bytes io ins
+  image.save(imgByteArr, format)
+  # Turn the BytesIO object back into a bytes object
+  imgByteArr = imgByteArr.getvalue()
+  return imgByteArr
