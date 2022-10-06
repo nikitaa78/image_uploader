@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ImageUploading from 'react-images-uploading';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Banner from './Banner';
 import Button from '@mui/material/Button';
+import { Gallery } from "react-grid-gallery";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const useStyles = makeStyles({
   app: {
@@ -29,15 +31,31 @@ const useStyles = makeStyles({
 export function ImageUpload() {
   const classes = useStyles();
   const [images, setImages] = React.useState([]);
+  const [galleryImages, setGalleryImages] = React.useState([]);
   const [open, setOpen] = React.useState(false);
   const [severity, setSeverity] = React.useState(0);
 
   const maxNumber = 10;
 
+  const handleGallerySelect = (index, item, event) => {
+    const nextImages = galleryImages.map((image, i) =>
+      i === index ? { ...image, isSelected: !image.isSelected } : image
+    );
+    setGalleryImages(nextImages);
+  };
+
+  const mapImagesForGallery = imageList => {
+    const galleryList = imageList.map((image) => {return {src: image.data_url, width: 100, height: 100, customOverlay: (
+      <div><DeleteIcon /></div>
+    )}})
+    setGalleryImages(galleryList);
+  }
+
   const onUserImageUpload = (imageList, addUpdateIndex) => {
     // data for submit
     if (imageList.length === 0) {
       setImages(imageList);
+      mapImagesForGallery(imageList);
       setOpen(false);
     }
     let url = imageList[addUpdateIndex];
@@ -59,6 +77,7 @@ export function ImageUpload() {
         if (data.status === 200) {
           imageList[addUpdateIndex[0]].data_url = data.file_url
           setImages(imageList);
+          mapImagesForGallery(imageList);
         }
         setSeverity(data.status);
         setOpen(true);
@@ -66,6 +85,10 @@ export function ImageUpload() {
       );
     }
   };
+
+  // useEffect(() => {
+  //   setGalleryImages(images)
+  // }, [images])
 
   return (
     <div className={classes.app}>
@@ -104,9 +127,11 @@ export function ImageUpload() {
                   <Paper elevation={3}>
                       {isDragging ? "Drop here please" : "Upload space"}
                       <br></br>
-                      {imageList.map((image, index) => (
+                      {console.log(imageList)}
+                      {/* {imageList.map((image, index) => (
                           <img key={index} src={image.data_url} />
-                      ))}
+                      ))} */}
+                      <Gallery images={galleryImages} enableImageSelection={false} />
                   </Paper>
                 </Box>
                 <div>
