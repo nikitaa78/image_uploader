@@ -1,20 +1,42 @@
 import React from 'react';
 import ImageUploading from 'react-images-uploading';
+import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Banner from './Banner';
+import Button from '@mui/material/Button';
 
+const useStyles = makeStyles({
+  app: {
+    backgroundColor: '#DFFFFC',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+  },
+  dropZone: {
+    textAlign: 'center'
+  },
+  box: {
+    marginTop: '3vh',
+  },
+  imageButtons: {
+    margin: '50px',
+  },
+});
 
 export function ImageUpload() {
+  const classes = useStyles();
   const [images, setImages] = React.useState([]);
   const [open, setOpen] = React.useState(false);
   const [severity, setSeverity] = React.useState(0);
 
   const maxNumber = 10;
 
-  const onChange = (imageList, addUpdateIndex) => {
+  const onUserImageUpload = (imageList, addUpdateIndex) => {
     // data for submit
-    if (imageList.length == 0) {
+    if (imageList.length === 0) {
       setImages(imageList);
       setOpen(false);
     }
@@ -34,7 +56,7 @@ export function ImageUpload() {
       }).then((res) =>
         res.json().then((data) => {
           // Setting a data from api
-        if (data.status == 200) {
+        if (data.status === 200) {
           imageList[addUpdateIndex[0]].data_url = data.file_url
           setImages(imageList);
         }
@@ -46,11 +68,11 @@ export function ImageUpload() {
   };
 
   return (
-    <div className="App">
+    <div className={classes.app}>
       <ImageUploading
         multiple
         value={images}
-        onChange={onChange}
+        onChange={onUserImageUpload}
         maxNumber={maxNumber}
         dataURLKey="data_url"
       >
@@ -63,18 +85,21 @@ export function ImageUpload() {
           isDragging,
           dragProps,
         }) => (
-            <div className='drop-zone' {...dragProps}>
+            <div className={classes.dropZone} {...dragProps}>
                 <Banner open={open} setOpen={setOpen} severity={severity}/>
                 <Box
                   sx={{
-                      display: 'flex',
+                      display: 'inline-block',
                       flexWrap: 'wrap',
                       '& > :not(style)': {
                       m: 1,
-                      width: '50vw',
-                      height: '50vh',
+                      width: '75vw',
+                      height: '75vh',
                       },
+                      alignContent: 'center',
+                      alignItems: 'center',
                   }}
+                  className={classes.box}
                 >
                   <Paper elevation={3}>
                       {isDragging ? "Drop here please" : "Upload space"}
@@ -84,13 +109,16 @@ export function ImageUpload() {
                       ))}
                   </Paper>
                 </Box>
-                <button
-                    // style={isDragging ? { color: 'red' } : undefined}
-                    onClick={onImageUpload}
-                >
-                    Upload Image
-                </button>
-                <button onClick={onImageRemoveAll}>Remove all images</button>
+                <div>
+                  <Button sx={{ margin: '15px'}} variant="contained"
+                      // style={isDragging ? { color: 'red' } : undefined}
+                      onClick={onImageUpload}
+                  >
+                      Upload Image
+                  </Button>
+                  <Button sx={{ margin: '15px'}} variant='outlined' onClick={onImageRemoveAll}>Remove all images</Button>
+                </div>
+
             </div>
         )}
       </ImageUploading>
