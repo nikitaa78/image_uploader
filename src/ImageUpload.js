@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 
 const useStyles = makeStyles({
   app: {
-    backgroundColor: '#F7A0A0',
+    backgroundColor: '#FADBD8',
     position: 'absolute',
     top: 0,
     left: 0,
@@ -126,31 +126,40 @@ export function ImageUpload() {
                       flexWrap: 'wrap',
                       '& > :not(style)': {
                       m: 1,
-                      width: '75vw',
-                      height: '75vh',
                       },
                       alignContent: 'center',
                       alignItems: 'center',
+                      paddingTop: '2vh',
                   }}
                   className={classes.box}
                 >
-                  <Paper elevation={3}>
-                      <div className={classes.uploadTitle}>
+                  <div className={classes.uploadTitle}>
+                    <Typography variant="h6">
+                      {isDragging ? "Drop here please" : "Drop image here"}
+                    </Typography>
+                  </div>
+                  <Paper style={{borderRadius: '10px',width: '75vw',
+                      height: '75vh'}} elevation={4}>
+                      {/* <div className={classes.uploadTitle}>
                         <Typography variant="h6">
                           {isDragging ? "Drop here please" : "Upload space"}
                         </Typography>
-                      </div>
+                      </div> */}
                       <br></br>
                       <Gallery images={galleryImages} margin={10} onClick={(index) => onImageRemove(index)} enableImageSelection={false} />
                   </Paper>
                 </Box>
                 <div>
-                  <Button sx={{ margin: '15px', backgroundColor: '#EA4D4D'}} variant="contained"
+                  <Button sx={{ margin: '15px', backgroundColor: '#EA4D4D', '&:hover': {
+                                        backgroundColor: '#DC4343',
+                                      },
+                              }} 
+                      variant="contained"
                       onClick={onImageUpload}
                   >
                       Upload Image
                   </Button>
-                  <Button sx={{ margin: '15px', color: '#EA4D4D', borderColor: '#EA4D4D'}} variant='outlined' onClick={onImageRemoveAll}>Remove all images</Button>
+                  <Button sx={{ margin: '15px', color: '#EA4D4D', borderColor: '#EA4D4D', '&:hover': {borderColor: '#DC4343'},}} variant='outlined' onClick={onImageRemoveAll}>Remove all images</Button>
                 </div>
 
             </div>
