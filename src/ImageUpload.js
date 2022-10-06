@@ -128,18 +128,17 @@ export function ImageUpload() {
                       m: 1,
                       },
                       alignContent: 'center',
-                      alignItems: 'center',
-                      paddingTop: '2vh',
+                      alignItems: 'center'
                   }}
                   className={classes.box}
                 >
                   <div className={classes.uploadTitle}>
-                    <Typography variant="h6">
-                      {isDragging ? "Drop here please" : "Drop image here"}
+                    <Typography variant="h6" style={{color: '#EA4D4D'}}>
+                      {isDragging ? "Drop here please" : "Drop image here!"}
                     </Typography>
                   </div>
                   <Paper style={{borderRadius: '10px',width: '75vw',
-                      height: '75vh'}} elevation={4}>
+                      height: '75vh', paddingTop: '2vh'}} elevation={4}>
                       {/* <div className={classes.uploadTitle}>
                         <Typography variant="h6">
                           {isDragging ? "Drop here please" : "Upload space"}
