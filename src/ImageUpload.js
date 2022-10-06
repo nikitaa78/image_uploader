@@ -60,6 +60,7 @@ export function ImageUpload() {
     if (!addUpdateIndex) {
       setImages(imageList);
       mapImagesForGallery(imageList);
+      setOpen(false);
     }
     // all images are deleted
     if (imageList.length === 0) {
@@ -139,11 +140,6 @@ export function ImageUpload() {
                   </div>
                   <Paper style={{borderRadius: '10px',width: '75vw',
                       height: '75vh', paddingTop: '2vh'}} elevation={4}>
-                      {/* <div className={classes.uploadTitle}>
-                        <Typography variant="h6">
-                          {isDragging ? "Drop here please" : "Upload space"}
-                        </Typography>
-                      </div> */}
                       <br></br>
                       <Gallery images={galleryImages} margin={10} onClick={(index) => onImageRemove(index)} enableImageSelection={false} />
                   </Paper>
