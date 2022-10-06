@@ -7,10 +7,11 @@ import Banner from './Banner';
 import Button from '@mui/material/Button';
 import { Gallery } from "react-grid-gallery";
 import DeleteIcon from '@mui/icons-material/Delete';
+import Typography from '@mui/material/Typography';
 
 const useStyles = makeStyles({
   app: {
-    backgroundColor: '#DFFFFC',
+    backgroundColor: '#F7A0A0',
     position: 'absolute',
     top: 0,
     left: 0,
@@ -26,6 +27,9 @@ const useStyles = makeStyles({
   imageButtons: {
     margin: '50px',
   },
+  uploadTitle: {
+    padding: '10px',
+  },
 });
 
 export function ImageUpload() {
@@ -37,17 +41,14 @@ export function ImageUpload() {
 
   const maxNumber = 10;
 
-  const handleGallerySelect = (index, item, event) => {
-    const nextImages = galleryImages.map((image, i) =>
-      i === index ? { ...image, isSelected: !image.isSelected } : image
-    );
-    setGalleryImages(nextImages);
-  };
-
   const mapImagesForGallery = imageList => {
-    const galleryList = imageList.map((image) => {return {src: image.data_url, width: 100, height: 100, customOverlay: (
-      <div><DeleteIcon /></div>
-    )}})
+    const galleryList = imageList.map((image) => 
+      {return {src: image.data_url, width: 100, height: 100, customOverlay: (
+        <div style={{position: 'absolute', top: '0px', right: '0px', backgroundColor: '#FFFFFF', opacity: '75%'}}> 
+          <DeleteIcon style={{color: '#000000'}} />
+        </div>
+      )}}
+    )
     setGalleryImages(galleryList);
   }
 
@@ -134,22 +135,22 @@ export function ImageUpload() {
                   className={classes.box}
                 >
                   <Paper elevation={3}>
-                      {isDragging ? "Drop here please" : "Upload space"}
+                      <div className={classes.uploadTitle}>
+                        <Typography variant="h6">
+                          {isDragging ? "Drop here please" : "Upload space"}
+                        </Typography>
+                      </div>
                       <br></br>
-                      {/* {imageList.map((image, index) => (
-                          <img key={index} src={image.data_url} />
-                      ))} */}
-                      <Gallery images={galleryImages} onClick={(index) => onImageRemove(index)} enableImageSelection={false} />
+                      <Gallery images={galleryImages} margin={10} onClick={(index) => onImageRemove(index)} enableImageSelection={false} />
                   </Paper>
                 </Box>
                 <div>
-                  <Button sx={{ margin: '15px'}} variant="contained"
-                      // style={isDragging ? { color: 'red' } : undefined}
+                  <Button sx={{ margin: '15px', backgroundColor: '#EA4D4D'}} variant="contained"
                       onClick={onImageUpload}
                   >
                       Upload Image
                   </Button>
-                  <Button sx={{ margin: '15px'}} variant='outlined' onClick={onImageRemoveAll}>Remove all images</Button>
+                  <Button sx={{ margin: '15px', color: '#EA4D4D', borderColor: '#EA4D4D'}} variant='outlined' onClick={onImageRemoveAll}>Remove all images</Button>
                 </div>
 
             </div>
