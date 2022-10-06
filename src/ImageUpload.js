@@ -52,12 +52,21 @@ export function ImageUpload() {
   }
 
   const onUserImageUpload = (imageList, addUpdateIndex) => {
-    // data for submit
+    // console.log("am i here????");
+    // console.log("image list: ", imageList);
+    // console.log("addUpdateIndex: ", addUpdateIndex);
+    // this means an image is being deleted
+    if (!addUpdateIndex) {
+      setImages(imageList);
+      mapImagesForGallery(imageList);
+    }
+    // all images are deleted
     if (imageList.length === 0) {
       setImages(imageList);
       mapImagesForGallery(imageList);
       setOpen(false);
     }
+    // an image is being uploaded 
     let url = imageList[addUpdateIndex];
     console.log(url);
     let backendData = null;
@@ -127,11 +136,10 @@ export function ImageUpload() {
                   <Paper elevation={3}>
                       {isDragging ? "Drop here please" : "Upload space"}
                       <br></br>
-                      {console.log(imageList)}
                       {/* {imageList.map((image, index) => (
                           <img key={index} src={image.data_url} />
                       ))} */}
-                      <Gallery images={galleryImages} enableImageSelection={false} />
+                      <Gallery images={galleryImages} onClick={(index) => onImageRemove(index)} enableImageSelection={false} />
                   </Paper>
                 </Box>
                 <div>
