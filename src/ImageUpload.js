@@ -63,10 +63,8 @@ export function ImageUpload() {
   }
 
   const filterImage = index => {
-    console.log('filter');
     setOpen(false);
     let url = images[index];
-    console.log(url);
     if(url) {
       let temp = url.data_url
       images[index].data_url = url.filtered_file_url

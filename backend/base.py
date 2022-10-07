@@ -17,7 +17,8 @@ app = Flask(__name__)
 def send_image():
     '''
     Route: /send-image
-    Description: API route to send image to disk from frontend
+    Description: API route to send image to disk from frontend -
+    sends over 90 degree rotated image url and black and white filtered image url in response
     '''
     body = request.get_json()
     url = body['url']
@@ -40,17 +41,10 @@ def send_image():
             base_string = url.replace("data:image/jpeg;base64,", "")
             decoded_img = base64.b64decode(base_string)
             img = Image.open(BytesIO(decoded_img))
-            rotated_img = img.rotate(90)
-            rotated_img_bytes = image_to_byte_array(rotated_img, 'jpeg')
-            encoded_img = base64.encodebytes(rotated_img_bytes)
-            str_encoding = str(encoded_img, 'utf-8')
-            file_url = "data:image/jpeg;base64," + str_encoding
-            # filter image
-            filtered_img = rotated_img.convert("L")
-            filtered_img_bytes = image_to_byte_array(filtered_img, 'png')
-            filtered_encoded_img = base64.encodebytes(filtered_img_bytes)
-            filtered_str_encoding = str(filtered_encoded_img, 'utf-8')
-            filtered_file_url = "data:image/png;base64," + filtered_str_encoding
+            
+            # rotate and filter image
+            file_url, filtered_file_url = rotate_and_filter_urls(img, 'jpeg')
+
             file_name = file_name_for_base64_data + ".jpg"
             img.save(file_name, "jpeg")
 
@@ -60,19 +54,8 @@ def send_image():
             decoded_img = base64.b64decode(base_string)
             img = Image.open(BytesIO(decoded_img))
 
-            # rotate image
-            rotated_img = img.rotate(90)
-            rotated_img_bytes = image_to_byte_array(rotated_img, 'png')
-            encoded_img = base64.encodebytes(rotated_img_bytes)
-            str_encoding = str(encoded_img, 'utf-8')
-            file_url = "data:image/png;base64," + str_encoding
-
-            # filter image
-            filtered_img = rotated_img.convert("L")
-            filtered_img_bytes = image_to_byte_array(filtered_img, 'png')
-            filtered_encoded_img = base64.encodebytes(filtered_img_bytes)
-            filtered_str_encoding = str(filtered_encoded_img, 'utf-8')
-            filtered_file_url = "data:image/png;base64," + filtered_str_encoding
+            # rotate and filter image
+            file_url, filtered_file_url = rotate_and_filter_urls(img, 'png')
 
             file_name = file_name_for_base64_data + ".png"
             img.save(file_name, "png")
@@ -81,17 +64,10 @@ def send_image():
         else:
             response = requests.get(url)
             img = Image.open(BytesIO(response.content)).convert("RGB")
-            rotated_img = img.rotate(90)
-            rotated_img_bytes = image_to_byte_array(rotated_img, 'jpeg')
-            encoded_img = base64.encodebytes(rotated_img_bytes)
-            str_encoding = str(encoded_img, 'utf-8')
-            file_url = "data:image/jpeg;base64," + str_encoding
-            # filter image
-            filtered_img = rotated_img.convert("L")
-            filtered_img_bytes = image_to_byte_array(filtered_img, 'png')
-            filtered_encoded_img = base64.encodebytes(filtered_img_bytes)
-            filtered_str_encoding = str(filtered_encoded_img, 'utf-8')
-            filtered_file_url = "data:image/png;base64," + filtered_str_encoding
+
+            # rotate and filter image
+            file_url, filtered_file_url = rotate_and_filter_urls(img, 'jpeg')
+
             file_name = file_name_for_regular_data + ".jpg"
             img.save(file_name, "jpeg")
         
@@ -101,8 +77,35 @@ def send_image():
         status = "Error! = " + str(e)
         print(status)
 
-
     return jsonify({'status': 400}), 400
+
+# rotated and filtered image url
+def rotate_and_filter_urls(image, format):
+    #rotate image
+    rotated_img, encoded_img = rotate_image(image, format)
+    str_encoding = str(encoded_img, 'utf-8')
+    file_url = "data:image/" + format + ";base64," + str_encoding
+
+    # filter image
+    filtered_img, filtered_encoded_img = filter_image(rotated_img, format)
+    filtered_str_encoding = str(filtered_encoded_img, 'utf-8')
+    filtered_file_url = "data:image/" + format + ";base64," + filtered_str_encoding
+
+    return file_url, filtered_file_url
+
+# returns encoded rotated image
+def rotate_image(image, format):
+    rotated_img = image.rotate(90)
+    rotated_img_bytes = image_to_byte_array(rotated_img, format)
+    encoded_img = base64.encodebytes(rotated_img_bytes)
+    return rotated_img, encoded_img
+
+# returns encoded filtered image
+def filter_image(image, format):
+    filtered_img = image.convert("L")
+    filtered_img_bytes = image_to_byte_array(filtered_img, format)
+    filtered_encoded_img = base64.encodebytes(filtered_img_bytes)
+    return filtered_img, filtered_encoded_img
 
 def image_to_byte_array(image: Image, format) -> bytes:
   # BytesIO is a fake file stored in memory
