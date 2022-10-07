@@ -6,8 +6,20 @@ import Box from '@mui/material/Box';
 import Banner from './Banner';
 import Button from '@mui/material/Button';
 import { Gallery } from "react-grid-gallery";
-import DeleteIcon from '@mui/icons-material/Delete';
 import Typography from '@mui/material/Typography';
+import { keyframes } from '@mui/system';
+
+
+const fadeIn = keyframes`
+0% {
+  opacity: 0;
+  transform: translateX(80px);
+}
+100% {
+  opacity: 1;
+  transform: translateY(0);
+}
+`;
 
 const useStyles = makeStyles({
   app: {
@@ -44,11 +56,13 @@ export function ImageUpload() {
   const mapImagesForGallery = imageList => {
     // turn custom overalay into delete button and turn gallery onClick into request that filters image
     const galleryList = imageList.map((image) => 
-      {return {src: image.data_url, width: 100, height: 100, customOverlay: (
-        <div style={{position: 'absolute', top: '0px', right: '0px', backgroundColor: '#FFFFFF', opacity: '75%'}}> 
-          <DeleteIcon style={{color: '#000000'}} />
-        </div>
-      )}}
+      {return {src: image.data_url, width: 100, height: 100 
+        // <div style={{position: 'absolute', top: '0px', right: '0px', backgroundColor: '#FFFFFF', opacity: '75%'}}>
+        //   <Button aria-label="delete" size="small" onClick={() => {console.log("hi")}}>
+        //     <DeleteIcon style={{color: '#000000'}} />
+        //   </Button>
+        // </div>
+      }}
     )
     setGalleryImages(galleryList);
   }
@@ -159,7 +173,7 @@ export function ImageUpload() {
                     </Typography>
                   </div>
                   <Paper style={{borderRadius: '10px',width: '75vw',
-                      height: '75vh', paddingTop: '2vh'}} elevation={3}>
+                      height: '75vh', paddingTop: '2vh', animation: `${fadeIn} 5s ease`}} elevation={3}>
                       <br></br>
                       <Gallery images={galleryImages} margin={10} onClick={(index) => filterImage(index)} enableImageSelection={false} />
                   </Paper>
