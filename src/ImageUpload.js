@@ -13,8 +13,8 @@ const useStyles = makeStyles({
   app: {
     backgroundColor: '#FADBD8',
     position: 'absolute',
-    top: 0,
-    left: 0,
+    // top: 0,
+    // left: 0,
     width: '100%',
     height: '100%',
   },
@@ -28,7 +28,7 @@ const useStyles = makeStyles({
     margin: '50px',
   },
   uploadTitle: {
-    padding: '10px',
+    marginTop: '5px',
   },
 });
 
@@ -42,6 +42,7 @@ export function ImageUpload() {
   const maxNumber = 10;
 
   const mapImagesForGallery = imageList => {
+    // turn custom overalay into delete button and turn gallery onClick into request that filters image
     const galleryList = imageList.map((image) => 
       {return {src: image.data_url, width: 100, height: 100, customOverlay: (
         <div style={{position: 'absolute', top: '0px', right: '0px', backgroundColor: '#FFFFFF', opacity: '75%'}}> 
@@ -52,17 +53,33 @@ export function ImageUpload() {
     setGalleryImages(galleryList);
   }
 
+  const filterImage = index => {
+    console.log('filter');
+    setOpen(false);
+    let url = images[index];
+    console.log(url);
+    let backendData = null;
+    if(url) {
+      let temp = url.data_url
+      images[index].data_url = url.filtered_file_url
+      images[index].filtered_file_url = temp
+      images[index].filtered = !url.filtered
+      setImages(images);
+      mapImagesForGallery(images);
+    }
+  }
+
   const onUserImageUpload = (imageList, addUpdateIndex) => {
     // console.log("am i here????");
     // console.log("image list: ", imageList);
     // console.log("addUpdateIndex: ", addUpdateIndex);
-    // this means an image is being deleted
+    // an image is being deleted
     if (!addUpdateIndex) {
       setImages(imageList);
       mapImagesForGallery(imageList);
       setOpen(false);
     }
-    // all images are deleted
+    // all images are being deleted
     if (imageList.length === 0) {
       setImages(imageList);
       mapImagesForGallery(imageList);
@@ -87,6 +104,8 @@ export function ImageUpload() {
           // Setting a data from api
         if (data.status === 200) {
           imageList[addUpdateIndex[0]].data_url = data.file_url
+          imageList[addUpdateIndex[0]].filtered = false
+          imageList[addUpdateIndex[0]].filtered_file_url = data.filtered_file_url
           setImages(imageList);
           mapImagesForGallery(imageList);
         }
@@ -103,6 +122,7 @@ export function ImageUpload() {
 
   return (
     <div className={classes.app}>
+      {/* <Banner open={open} setOpen={setOpen} severity={severity}/> */}
       <ImageUploading
         multiple
         value={images}
@@ -139,9 +159,9 @@ export function ImageUpload() {
                     </Typography>
                   </div>
                   <Paper style={{borderRadius: '10px',width: '75vw',
-                      height: '75vh', paddingTop: '2vh'}} elevation={4}>
+                      height: '75vh', paddingTop: '2vh'}} elevation={3}>
                       <br></br>
-                      <Gallery images={galleryImages} margin={10} onClick={(index) => onImageRemove(index)} enableImageSelection={false} />
+                      <Gallery images={galleryImages} margin={10} onClick={(index) => filterImage(index)} enableImageSelection={false} />
                   </Paper>
                 </Box>
                 <div>
