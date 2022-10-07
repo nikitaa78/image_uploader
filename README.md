@@ -11,6 +11,7 @@ https://user-images.githubusercontent.com/20808557/194671994-1faf702c-c7cc-4048-
 
 <img width="1792" alt="Screen Shot 2022-10-07 at 3 28 56 PM" src="https://user-images.githubusercontent.com/20808557/194671245-8fa6034d-f37e-4f1b-af43-e9c0ef98a684.png"><img width="1792" alt="Screen Shot 2022-10-07 at 3 29 08 PM" src="https://user-images.githubusercontent.com/20808557/194671246-5a8d3826-82f6-4366-a970-522546fe9923.png">
 
+<img width="1792" alt="Screen Shot 2022-10-07 at 3 48 59 PM" src="https://user-images.githubusercontent.com/20808557/194672600-70f8f10b-53b5-4eab-bbb6-ff00ea274db6.png">
 
 ## Local Installation
 
