@@ -5,10 +5,8 @@ import datetime
 from PIL import Image
 import base64
 from io import BytesIO
-from jinja2 import Undefined
 import requests
 import io
-import pickle
   
 x = datetime.datetime.now()
   

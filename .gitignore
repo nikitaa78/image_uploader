@@ -23,5 +23,5 @@ yarn-debug.log*
 yarn-error.log*
 
 #python flask
-backend/__pycache__/
 backend/env/
+backend/__pycache__
