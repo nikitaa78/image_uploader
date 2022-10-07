@@ -1,4 +1,3 @@
-# Import flask and datetime module for showing date and time
 from urllib.request import urlretrieve
 from flask import Flask, jsonify, request
 import datetime
@@ -22,7 +21,7 @@ def send_image():
     '''
     body = request.get_json()
     url = body['url']
-    # ----- SECTION 1 -----  
+
     #File naming process for nameless base64 data.
     #We are using the timestamp as a file_name.
     from datetime import datetime
@@ -33,9 +32,10 @@ def send_image():
     #We are taken the last 8 characters from the url string.
     file_name_for_regular_data = url[-10:-4]
     
-    # ----- SECTION 2 -----
     try:
         file_url = None
+        filtered_file_url = None
+        file_name = None
         # Base64 DATA
         if "data:image/jpeg;base64," in url:
             base_string = url.replace("data:image/jpeg;base64,", "")
@@ -71,7 +71,6 @@ def send_image():
             file_name = file_name_for_regular_data + ".jpg"
             img.save(file_name, "jpeg")
         
-    # ----- SECTION 3 -----    
         return jsonify({'status': 200, 'file_name': file_name, 'file_url': file_url, 'filtered_file_url': filtered_file_url}), 200
     except Exception as e:
         status = "Error! = " + str(e)
@@ -107,11 +106,9 @@ def filter_image(image, format):
     filtered_encoded_img = base64.encodebytes(filtered_img_bytes)
     return filtered_img, filtered_encoded_img
 
+# helper function to convert image to bytes
 def image_to_byte_array(image: Image, format) -> bytes:
-  # BytesIO is a fake file stored in memory
   imgByteArr = io.BytesIO()
-  # image.save expects a file as a argument, passing a bytes io ins
   image.save(imgByteArr, format)
-  # Turn the BytesIO object back into a bytes object
   imgByteArr = imgByteArr.getvalue()
   return imgByteArr
