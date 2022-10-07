@@ -4,6 +4,8 @@ This webapp uses Python Flask (backend) and React, Material UI (frontend).
 
 Users are able to upload an image, see a 90 degree rotated image, and click on the image to black and white filter and unfilter an image.
 
+[Local Installation](https://github.com/nikitaa78/image_uploader/blob/master/README.md#local-installation)
+
 https://user-images.githubusercontent.com/20808557/194671994-1faf702c-c7cc-4048-9630-bb33262a1e16.mp4
 
 
