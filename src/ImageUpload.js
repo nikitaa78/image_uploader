@@ -54,15 +54,10 @@ export function ImageUpload() {
   const maxNumber = 10;
 
   const mapImagesForGallery = imageList => {
-    // turn custom overalay into delete button and turn gallery onClick into request that filters image
     const galleryList = imageList.map((image) => 
-      {return {src: image.data_url, width: 100, height: 100 
-        // <div style={{position: 'absolute', top: '0px', right: '0px', backgroundColor: '#FFFFFF', opacity: '75%'}}>
-        //   <Button aria-label="delete" size="small" onClick={() => {console.log("hi")}}>
-        //     <DeleteIcon style={{color: '#000000'}} />
-        //   </Button>
-        // </div>
-      }}
+      {
+        return {src: image.data_url, width: 100, height: 100 }
+      }
     )
     setGalleryImages(galleryList);
   }
