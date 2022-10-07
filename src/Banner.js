@@ -3,15 +3,14 @@ import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
-import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
 
 export default function Banner(props) {
 
   const getSeverity = severity => {
-    if (severity == 200) {
+    if (severity === 200) {
         return 'success'
-    } else if (severity == 400) {
+    } else if (severity === 400) {
         return 'error'
     } else {
         return ''
@@ -37,7 +36,7 @@ export default function Banner(props) {
           }
           sx={{ mb: 2 }}
         >
-          {props.severity == 200 ? 'Image uploaded!' : 'Error uploading image :('}
+          {props.severity === 200 ? 'Image uploaded!' : 'Error uploading image :('}
         </Alert>
       </Collapse>
       {/* <Button

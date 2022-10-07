@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import ImageUploading from 'react-images-uploading';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@mui/material/Paper';
@@ -72,7 +72,6 @@ export function ImageUpload() {
     setOpen(false);
     let url = images[index];
     console.log(url);
-    let backendData = null;
     if(url) {
       let temp = url.data_url
       images[index].data_url = url.filtered_file_url
@@ -84,9 +83,6 @@ export function ImageUpload() {
   }
 
   const onUserImageUpload = (imageList, addUpdateIndex) => {
-    // console.log("am i here????");
-    // console.log("image list: ", imageList);
-    // console.log("addUpdateIndex: ", addUpdateIndex);
     // an image is being deleted
     if (!addUpdateIndex) {
       setImages(imageList);
@@ -130,13 +126,8 @@ export function ImageUpload() {
     }
   };
 
-  // useEffect(() => {
-  //   setGalleryImages(images)
-  // }, [images])
-
   return (
     <div className={classes.app}>
-      {/* <Banner open={open} setOpen={setOpen} severity={severity}/> */}
       <ImageUploading
         multiple
         value={images}
