@@ -1,3 +1,17 @@
+# Image Uploader
+
+This webapp uses Python Flask (backend) and React, Material UI (frontend). 
+
+Users are able to upload an image, see a 90 degree rotated image, and click on the image to black and white filter and unfilter an image.
+
+#TODO: insert pics
+
+## How to Run
+
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
